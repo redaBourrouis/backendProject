@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<head>
+ <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<title>Films d'une projection</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<div class="container mt-5">
+		<div class="col-md-10">
+		<div class="col-lg-10 offset-lg-2">
+			<div class="card">
+				<div class="card-header">Films en projection</div>
+				<div class="card-body">
+					<form action="get" th:action="@{filmsList}">
+						<div class="form-group">
+							<img src="../static/images/search.jpg"  alt="Search" th:src="@{images/search.jpg}">
+							<br>
+							<br>
+							<label>Titre : </label> <input type="text" name="keyword"
+								th:value="${keyword}">
+							<button class="btn btn-primary" type="submit">Rechercher</button>
+							<div class="text-right"><a class="btn btn-primary btn-lg" th:href="@{formFilmAdd}" role="button">Ajouter un film</a>
+						</div>
+					</form>
+					<table class="table">
+						<tr>
+							<th>ID</th>
+							<th>Titre</th>
+							<th>Durée</th>
+						</tr>
+						<tr th:each="f:${listefilms}">
+							<td th:text="${f.id}"></td>
+							<td th:text="${f.titre}"></td>
+							<td th:text="${f.duree}"></td>
+							<td><a class="btn btn-success"
+								th:href="@{formFilmEdit(id=${f.id})}">Modifier</a>
+								<a onclick="return confirm('Confirmez la suppression.')"
+						class="btn btn-danger" th:href="@{deleteFilm(id=${f.id},keyword=${keyword},page=${currentPage},size=${size})}">Supprimer</a>
+								<td></td>
+						</tr>
+
+					</table>
+					<ul class="nav nav-pills">
+						<li th:each="page,status:${pages}"><a
+							th:class="${status.index==currentPage?'btn btn-primary':
+						'btn'}"
+							th:href="@{filmsList(page=${status.index},keyword=${keyword})}"
+							th:text="${status.index}"></a></li>
+					</ul>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+	</div>
+</body>
+</html>
